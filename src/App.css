@@ -39,3 +39,11 @@ justify-content: space-evenly;
   margin: 0 auto;
   object-fit: contain;
 }
+
+.form{
+  padding: 20px;
+}
+
+.table{
+  padding: 10px;
+}

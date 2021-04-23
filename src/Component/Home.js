@@ -1,25 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState,} from 'react'
+// import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, TableCell, TableContainer, Paper, Table, TableHead, TableRow, TableBody, } from '@material-ui/core'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
-import { DataGrid } from '@material-ui/data-grid';
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         display: 'flex',
-//         flexDirection: 'column',
-//         height: 600,
-//         width: '100%',
-//         '& .MuiFormGroup-options': {
-//             alignItems: 'center',
-//             paddingBottom: theme.spacing(1),
-//             '& > div': {
-//                 minWidth: 100,
-//                 margin: theme.spacing(2, 2, 2, 0),
-//             },
-//         },
-//     },
-// }));
+// import { DataGrid } from '@material-ui/data-grid';
 
 const Home = () => {
     const [name, setName] = useState('')
@@ -66,81 +49,33 @@ const Home = () => {
     }
 
     const handleOpenForm = () => {
-        setFlag(true)
-        // myForm1()
+        setFlag(!false)
     }
 
-    // const myForm = () => {
-    //     return (
-    //         <div className="form-names">
-    //             <FormControl>
-    //                 <InputLabel>Payer</InputLabel>
-    //                 <Select value={payer} onChange={handlePayerChange}>
-    //                     <MenuItem value="Commodity" selected>Commodity</MenuItem>
-    //                     {allNames.map(item => (
-    //                         <MenuItem value={item.name}>{item.name}</MenuItem>
-    //                     ))
-    //                     }
-    //                 </Select>
-    //             </FormControl>
-    //             <FormControl>
-    //                 <InputLabel>Payee</InputLabel>
-    //                 <Select value={payee} onChange={handlePayeeChange}>
-    //                     {allNames.map(item => (
-    //                         <MenuItem value={item.name}>{item.name}</MenuItem>
-    //                     ))
-    //                     }
-    //                 </Select>
-    //             </FormControl>
-    //             <FormControl>
-    //                 <TextField
-    //                     id="standard-number"
-    //                     label="Number"
-    //                     type="number"
-    //                     value={amount}
-    //                     onChange={handleAmountChange}
-    //                     InputLabelProps={{
-    //                         shrink: true,
-    //                     }}
-    //                 />
 
-
-    //             </FormControl>
-    //             <Button
-    //                 size="small"
-    //                 variant="outlined"
-    //                 color="primary"
-    //             >
-    //                 <KeyboardArrowRightIcon fontSize="small" /> ADD+
-    //                  </Button>
-
-    //         </div>
-    //     )
+    // function createData(payer, payee, amount) {
+    //     return { payer, payee, amount };
     // }
 
 
-    function createData(payer, payee, amount) {
-        return { payer, payee, amount };
-    }
-
-
-    const myForm1 = () => {
-        var rows = []
+    const myForm = () => {
+        // var rows = []
         function addValues() {
-            console.log(finalValues);
-            setItems([...items, finalValues])
-            rows = [createData(finalValues['payer'], finalValues['payee'], finalValues['amount'])]
+            console.log("my Final values",finalValues);
+            if((finalValues['payer'] !== "")  && (finalValues['payee'] !== "") && (finalValues['amount'] !== "")){
+                setItems([...items, finalValues])
+            } else{
+                alert("Enter all Fields")
+            }
+            setFinalValues({
+                ...finalValues,
+                "payer":"",
+                "payee":"",
+                "amount":""
+            })
         }
-        // items.map(item => {  
-        //     rows.push(createData(item.payer, item.payee, item.amount))
-        // })
-        // rows = [createData(finalValues['payer'], finalValues['payee'], finalValues['amount'])]
-
-        // rows = [
-        //     createData(payer, payee, amount)
-        // ];
         return (
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} className="table">
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -156,7 +91,7 @@ const Home = () => {
                                 <FormControl>
                                     <InputLabel>Payer</InputLabel>
                                     <Select value={payer} onChange={handleFinalChange("payer")}>
-                                        <MenuItem value="Select" selected>Select</MenuItem>
+                                        {/* <MenuItem value="Select" dis selected>Select</MenuItem> */}
                                         {allNames.map(item => (
                                             <MenuItem value={item.name} >{item.name}</MenuItem>
                                         ))
@@ -170,10 +105,10 @@ const Home = () => {
                                 <FormControl>
                                     <InputLabel>Payee</InputLabel>
                                     <Select value={payee} onChange={handleFinalChange("payee")}>
-                                        <MenuItem value="Select" selected>Select</MenuItem>
+                                        {/* <MenuItem value="Select" selected>Select</MenuItem> */}
 
                                         {allNames.map(item =>
-                                        ((payer != item.name) ? <MenuItem value={item.name}>{item.name}</MenuItem> : <></>
+                                        ((payer !== item.name) ? <MenuItem value={item.name}>{item.name}</MenuItem> : <></>
                                         ))
                                         }
                                     </Select>
@@ -185,9 +120,10 @@ const Home = () => {
                                 <FormControl>
                                     <TextField
                                         id="standard-number"
-                                        label="Number"
+                                        label="Amount"
                                         type="number"
                                         value={amount}
+                                        placeholder="Emter Amount"
                                         onChange={handleFinalChange("amount")}
                                         InputLabelProps={{
                                             shrink: true,
@@ -213,76 +149,13 @@ const Home = () => {
 
                     <TableBody>
                         {items.length > 0 && items.map((row) => (
-                            // <TableRow key={row.name}>
-                            //     <TableCell component="th" scope="row">
-                            //         {row.payer}
-                            //     </TableCell>
-                            //     <TableCell align="right">{row.payee}</TableCell>
-                            //     <TableCell align="right">{row.amount}</TableCell>
-                            // </TableRow>
-
-
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="center">
-                                        <FormControl>
-                                            <InputLabel>Payer</InputLabel>
-                                            <Select value={row.payer} disabled onChange={handleFinalChange("payer")}>
-                                                {/* <MenuItem value="Select" selected>Select</MenuItem>
-                                            {allNames.map(item => (
-                                                <MenuItem value={item.name} >{item.name}</MenuItem>
-                                            ))
-                                            } */}
-                                            </Select>
-                                        </FormControl>
-                                    </TableCell>
-
-
-                                    <TableCell align="center">
-                                        <FormControl>
-                                            <InputLabel>Payee</InputLabel>
-                                            <Select value={row.payee} disabled onChange={handleFinalChange("payee")}>
-                                                {/* <MenuItem value="Select" selected>Select</MenuItem>
-    
-                                            {allNames.map(item =>
-                                            ((payer != item.name) ? <MenuItem value={item.name}>{item.name}</MenuItem> : <></>
-                                            ))
-                                            } */}
-                                            </Select>
-                                        </FormControl>
-                                    </TableCell>
-
-
-                                    <TableCell align="center">
-                                        <FormControl>
-                                            <TextField
-                                                id="standard-number"
-                                                label="Number"
-                                                type="number"
-                                                value={row.amount}
-                                                onChange={handleFinalChange("amount")}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                disabled
-                                            />
-                                        </FormControl>
-                                    </TableCell>
-
-
-                                    <TableCell align="center">
-                                        <Button
-                                            size="small"
-                                            variant="outlined"
-                                            color="primary"
-                                            onClick={(e) => { addValues() }}
-                                            disabled
-                                        >
-                                            <KeyboardArrowRightIcon fontSize="small" /> ADDED
-                                    </Button>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
+                            <TableRow key={row.name}>
+                                <TableCell component="th" align="center" scope="row">
+                                    {row.payer}
+                                </TableCell>
+                                <TableCell align="center">{row.payee}</TableCell>
+                                <TableCell align="center">{row.amount}</TableCell>
+                            </TableRow>
                         ))}
                     </TableBody>
                 </Table>
@@ -290,18 +163,6 @@ const Home = () => {
         )
     }
 
-
-    // const handlePayerChange = (e) => {
-    //     setPayer(e.target.value)
-    // }
-
-    // const handlePayeeChange = (e) => {
-    //     setPayee(e.target.value)
-    // }
-
-    // const handleAmountChange = (e) => {
-    //     setAmount(e.target.value)
-    // }
 
     return (
         <>
@@ -338,7 +199,7 @@ const Home = () => {
             </div>
 
             <div className="form">
-                {flag && myForm1()}
+                {flag && myForm()}
             </div>
         </>
     )
