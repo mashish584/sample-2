@@ -14,24 +14,28 @@ import {
   TableRow,
   TableBody,
 } from '@material-ui/core'
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 import { Graph } from 'react-d3-graph'
+import Expense from '../classes/expense'
+import { splitwise } from '../utils/splitwise'
 
 const Home = () => {
   const [name, setName] = useState('')
   const [allNames, setAllNames] = useState([])
   const [flag, setFlag] = useState(false)
   const [finalValues, setFinalValues] = useState({
-    "payer": "",
-    "payee": "",
+    "person1": "",
+    "person2": "",
     "amount": ""
   })
   const [items, setItems] = useState([])
+  const [outputList, setOutputList] = useState([])
 
-  const { payer, payee, amount } = finalValues;
+  const { person1, person2, amount } = finalValues;
 
-  const [graphData, setGraphData] = useState({})
-  const [graphConfig, setGraphConfig] = useState({})
+  const [inputGraphData, setInputGraphData] = useState({})
+  const [inputGraphConfig, setInputGraphConfig] = useState({})
+
+  const [outputGraphData, setOutputGraphData] = useState({})
 
   const handleFinalChange = name => event => {
     setFinalValues({ ...finalValues, [name]: event.target.value })
@@ -54,7 +58,7 @@ const Home = () => {
         <h3>Names</h3>
 
         {allNames.map(item => (
-          <h4> { item.name}</h4>
+          <h4 style={{ color: "#3f3f3f" }}> { item.name}</h4>
         ))
         }
       </div>
@@ -65,25 +69,17 @@ const Home = () => {
     setFlag(!false)
   }
 
-
-  // function createData(payer, payee, amount) {
-  //     return { payer, payee, amount };
-  // }
-
-
   const myForm = () => {
-    // var rows = []
     function addValues() {
-      console.log("my Final values", finalValues);
-      if ((finalValues['payer'] !== "") && (finalValues['payee'] !== "") && (finalValues['amount'] !== "")) {
+      if ((finalValues['person1'] !== "") && (finalValues['person2'] !== "") && (finalValues['amount'] !== "")) {
         setItems([...items, finalValues])
       } else {
         alert("Enter all Fields")
       }
       setFinalValues({
         ...finalValues,
-        "payer": "",
-        "payee": "",
+        "person1": "",
+        "person2": "",
         "amount": ""
       })
     }
@@ -102,9 +98,9 @@ const Home = () => {
             {items.length > 0 && items.map((row) => (
               <TableRow key={row.name}>
                 <TableCell component="th" align="center" scope="row">
-                  {row.payer}
+                  {row.person1}
                 </TableCell>
-                <TableCell align="center">{row.payee}</TableCell>
+                <TableCell align="center">{row.person2}</TableCell>
                 <TableCell align="center">{row.amount}</TableCell>
               </TableRow>
             ))}
@@ -112,8 +108,7 @@ const Home = () => {
               <TableCell align="center">
                 <FormControl>
                   <InputLabel>Payer</InputLabel>
-                  <Select value={payer} onChange={handleFinalChange("payer")}>
-                    {/* <MenuItem value="Select" dis selected>Select</MenuItem> */}
+                  <Select value={person1} onChange={handleFinalChange("person1")}>
                     {allNames.map(item => (
                       <MenuItem value={item.name} >{item.name}</MenuItem>
                     ))
@@ -126,11 +121,9 @@ const Home = () => {
               <TableCell align="center">
                 <FormControl>
                   <InputLabel>Payee</InputLabel>
-                  <Select value={payee} onChange={handleFinalChange("payee")}>
-                    {/* <MenuItem value="Select" selected>Select</MenuItem> */}
-
+                  <Select value={person2} onChange={handleFinalChange("person2")}>
                     {allNames.map(item =>
-                    ((payer !== item.name) ? <MenuItem value={item.name}>{item.name}</MenuItem> : <></>
+                    ((person1 !== item.name) ? <MenuItem value={item.name}>{item.name}</MenuItem> : <></>
                     ))
                     }
                   </Select>
@@ -162,8 +155,8 @@ const Home = () => {
                   color="primary"
                   onClick={(e) => { addValues() }}
                 >
-                  <KeyboardArrowRightIcon fontSize="small" /> ADD+
-                                </Button>
+                  + ADD
+                </Button>
 
               </TableCell>
             </TableRow>
@@ -195,13 +188,26 @@ const Home = () => {
       width: 500,
     };
 
-    setGraphData(data)
-    setGraphConfig(config)
+    setInputGraphData(data)
+    setInputGraphConfig(config)
   }
 
   const generateNodes = () => allNames.map(item => ({ id: item.name }))
 
-  const generateLinks = () => items.map(item => ({ source: item.payer, target: item.payee, amount: item.amount }))
+  const generateLinks = () => items.map(({ person1, person2, amount }) => ({ source: person1, target: person2, amount }))
+
+  const generateOutputLinks = (items) => items.map(({ person1, person2, amount }) => ({ source: person1, target: person2, amount }))
+
+  const splitwiseTransactions = () => {
+    const input = []
+    for (let item of items) {
+      input.push(new Expense(item.person1, item.person2, parseInt(item.amount)))
+    }
+    const output = splitwise(input)
+    console.log('output: ', output)
+    setOutputList(output)
+    setOutputGraphData({ nodes: generateNodes(), links: generateOutputLinks(output) })
+  }
 
   return (
     <>
@@ -217,7 +223,6 @@ const Home = () => {
           </div>
           <Button variant="contained"
             color="primary"
-            // onClick={() => { addParticipant() }}>
             onClick={addParticipant}
           >
             Add
@@ -241,14 +246,55 @@ const Home = () => {
       </div>
 
       {items && items.length ? (
-        <Button variant="contained" color="secondary" onClick={handleTransactionDataSubmit}>Submit Data</Button>
+        <div className="form-names">
+          <Button variant="contained" color="primary" onClick={handleTransactionDataSubmit}>Submit Data</Button>
+          <Button variant="contained" color="secondary" onClick={splitwiseTransactions}>Run</Button>
+        </div>
       ) : null}
 
-      {Object.keys(graphData).length && Object.keys(graphConfig).length ? (
+      {Object.keys(inputGraphData).length && Object.keys(inputGraphConfig).length ? (
         <Graph
           id="graph-id" // id is mandatory
-          data={graphData}
-          config={graphConfig}
+          data={inputGraphData}
+          config={inputGraphConfig}
+        />
+      ) : null}
+
+      {
+        outputList && outputList.length ? (
+          <>
+            <h3> Simplified Transactions</h3>
+            <TableContainer component={Paper} className="table">
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Payer</TableCell>
+                    <TableCell align="center">Payee</TableCell>
+                    <TableCell align="center">Amount</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {outputList.length && outputList.map((row) => (
+                    <TableRow key={row.name}>
+                      <TableCell component="th" align="center" scope="row">
+                        {row.person1}
+                      </TableCell>
+                      <TableCell align="center">{row.person2}</TableCell>
+                      <TableCell align="center">{row.amount}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        ) : null
+      }
+
+      {Object.keys(outputGraphData).length && Object.keys(inputGraphConfig).length ? (
+        <Graph
+          id="graph-id-output" // id is mandatory
+          data={outputGraphData}
+          config={inputGraphConfig}
         />
       ) : null}
     </>

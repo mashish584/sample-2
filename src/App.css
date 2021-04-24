@@ -2,31 +2,30 @@
   text-align: center;
 }
 
-.p-name-field{
+.p-name-field {
   margin: 1.2rem;
 }
 
-
-.list-div{
+.list-div {
   padding: 0.8rem;
 }
 
-.list-all-names{
+.list-all-names {
   margin: 0 auto;
-  /* padding: 10px; */
   width: 50%;
-  height: 35vh;
+  height: auto;
   overflow: scroll;
-  border: 1px solid black;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
 }
 
-.form-names{
-display: flex;
-flex-direction: row;
-/* align-items: center; */
-margin: 0 auto;
-justify-content: center;
-justify-content: space-evenly;
+.form-names {
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  margin: 0 auto;
+  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .MuiSelect-select.MuiSelect-select {
@@ -34,16 +33,16 @@ justify-content: space-evenly;
   width: 100px;
 }
 
-.form{
+.form {
   width: 90%;
   margin: 0 auto;
   object-fit: contain;
 }
 
-.form{
+.form {
   padding: 20px;
 }
 
-.table{
+.table {
   padding: 10px;
 }
