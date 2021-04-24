@@ -243,75 +243,99 @@ const Home = () => {
 
       </div>
 
-      <Grid container>
-        <Grid item xs={6}>
-          <div className="form">
-            {flag && myForm()}
-          </div>
+      {flag ? (
+        <>
+          <Grid container>
+            <Grid item xs={6}>
+              <div>
+                <div>
+                  <h4>Transactions</h4>
+                  <div style={{ textAlign: "left" }}>
+                    <p>Enter transactions in the table below :-</p>
+                    <ol>
+                      <li>Enter the names of the Payer in first column</li>
+                      <li>Enter the names of the Payee in second column</li>
+                      <li>Enter the amount paid in the third column</li>
+                      <li>Click on Simplify payments button when you are done with entering the payments.</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div className="form">
+                {flag && myForm()}
+              </div>
 
-          {items && items.length ? (
-            <div className="form-names">
-              <Button variant="contained" color="primary" onClick={handleTransactionDataSubmit}>Submit Data</Button>
-              <Button variant="contained" color="secondary" onClick={splitwiseTransactions}>Run</Button>
-            </div>
-          ) : null}
-        </Grid>
+              {items && items.length ? (
+                <div className="form-names">
+                  <Button variant="contained" color="primary" onClick={handleTransactionDataSubmit}>Build Graph</Button>
+                  <Button variant="contained" color="secondary" onClick={splitwiseTransactions}>Simplify Settlements</Button>
+                </div>
+              ) : null}
+            </Grid>
 
-        <Grid item xs={6}>
-          {Object.keys(inputGraphData).length && Object.keys(inputGraphConfig).length ? (
-            <Graph
-              id="graph-id" // id is mandatory
-              data={inputGraphData}
-              config={inputGraphConfig}
-            />
-          ) : null}
-        </Grid>
-      </Grid>
+            <Grid item xs={6}>
+              {Object.keys(inputGraphData).length && Object.keys(inputGraphConfig).length ? (
+                <>
+                  <h5>Generated graph from the transactions entered</h5>
+                  <Graph
+                    id="graph-id" // id is mandatory
+                    data={inputGraphData}
+                    config={inputGraphConfig}
+                  />
+                </>
+              ) : null}
+            </Grid>
+          </Grid>
 
-      <Grid container>
-        <Grid item xs={6}>
-          {
-            outputList && outputList.length ? (
-              <>
-                <h3> Simplified Transactions</h3>
-                <TableContainer component={Paper} className="table">
-                  <Table aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center">Payer</TableCell>
-                        <TableCell align="center">Payee</TableCell>
-                        <TableCell align="center">Amount</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {outputList.length && outputList.map((row) => (
-                        <TableRow key={row.name}>
-                          <TableCell component="th" align="center" scope="row">
-                            {row.person1}
-                          </TableCell>
-                          <TableCell align="center">{row.person2}</TableCell>
-                          <TableCell align="center">{row.amount}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </>
-            ) : null
-          }
-        </Grid>
-        <Grid item xs={6}>
-          {
-            Object.keys(outputGraphData).length && Object.keys(inputGraphConfig).length ? (
-              <Graph
-                id="graph-id-output" // id is mandatory
-                data={outputGraphData}
-                config={inputGraphConfig}
-              />
-            ) : null
-          }
-        </Grid>
-      </Grid>
+          <Grid container>
+            <Grid item xs={6}>
+              {
+                outputList && outputList.length ? (
+                  <>
+                    <h3> Simplified Settlement</h3>
+                    <TableContainer component={Paper} className="table">
+                      <Table aria-label="simple table">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell align="center">Payer</TableCell>
+                            <TableCell align="center">Payee</TableCell>
+                            <TableCell align="center">Amount</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {outputList.length && outputList.map((row) => (
+                            <TableRow key={row.name}>
+                              <TableCell component="th" align="center" scope="row">
+                                {row.person1}
+                              </TableCell>
+                              <TableCell align="center">{row.person2}</TableCell>
+                              <TableCell align="center">{row.amount}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </>
+                ) : null
+              }
+            </Grid>
+            <Grid item xs={6}>
+              {
+                Object.keys(outputGraphData).length && Object.keys(inputGraphConfig).length ? (
+                  <>
+                    <h5>Graph generated from the solution of algorithm</h5>
+                    <Graph
+                      id="graph-id-output" // id is mandatory
+                      data={outputGraphData}
+                      config={inputGraphConfig}
+                    />
+                  </>
+                ) : null
+              }
+            </Grid>
+          </Grid>
+        </>
+      ) : null}
     </div>
   )
 }
