@@ -248,7 +248,7 @@ const Home = () => {
       {flag ? (
         <>
           <Grid container>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <div>
                 <div>
                   <h4>Transactions</h4>
@@ -276,7 +276,7 @@ const Home = () => {
               ) : null}
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               {Object.keys(inputGraphData).length && Object.keys(inputGraphConfig).length ? (
                 <>
                   <h5>Generated graph from the transactions entered</h5>
@@ -291,7 +291,7 @@ const Home = () => {
           </Grid>
 
           <Grid container>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               {
                 outputList && outputList.length ? (
                   <>
@@ -322,7 +322,7 @@ const Home = () => {
                 ) : null
               }
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               {
                 Object.keys(outputGraphData).length && Object.keys(inputGraphConfig).length ? (
                   <>
