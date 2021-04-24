@@ -13,6 +13,7 @@ import {
   TableHead,
   TableRow,
   TableBody,
+  Grid,
 } from '@material-ui/core'
 import { Graph } from 'react-d3-graph'
 import Expense from '../classes/expense'
@@ -173,6 +174,7 @@ const Home = () => {
       links: generateLinks(),
     }
     const config = {
+      freezeAllDragEvents: true,
       nodeHighlightBehavior: true,
       node: {
         color: "lightgreen",
@@ -210,7 +212,7 @@ const Home = () => {
   }
 
   return (
-    <>
+    <div>
       <div className="name-component">
         <div className="p-name">
           <h2>Enter Participant's name</h2>
@@ -241,63 +243,76 @@ const Home = () => {
 
       </div>
 
-      <div className="form">
-        {flag && myForm()}
-      </div>
+      <Grid container>
+        <Grid item xs={6}>
+          <div className="form">
+            {flag && myForm()}
+          </div>
 
-      {items && items.length ? (
-        <div className="form-names">
-          <Button variant="contained" color="primary" onClick={handleTransactionDataSubmit}>Submit Data</Button>
-          <Button variant="contained" color="secondary" onClick={splitwiseTransactions}>Run</Button>
-        </div>
-      ) : null}
+          {items && items.length ? (
+            <div className="form-names">
+              <Button variant="contained" color="primary" onClick={handleTransactionDataSubmit}>Submit Data</Button>
+              <Button variant="contained" color="secondary" onClick={splitwiseTransactions}>Run</Button>
+            </div>
+          ) : null}
+        </Grid>
 
-      {Object.keys(inputGraphData).length && Object.keys(inputGraphConfig).length ? (
-        <Graph
-          id="graph-id" // id is mandatory
-          data={inputGraphData}
-          config={inputGraphConfig}
-        />
-      ) : null}
+        <Grid item xs={6}>
+          {Object.keys(inputGraphData).length && Object.keys(inputGraphConfig).length ? (
+            <Graph
+              id="graph-id" // id is mandatory
+              data={inputGraphData}
+              config={inputGraphConfig}
+            />
+          ) : null}
+        </Grid>
+      </Grid>
 
-      {
-        outputList && outputList.length ? (
-          <>
-            <h3> Simplified Transactions</h3>
-            <TableContainer component={Paper} className="table">
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Payer</TableCell>
-                    <TableCell align="center">Payee</TableCell>
-                    <TableCell align="center">Amount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {outputList.length && outputList.map((row) => (
-                    <TableRow key={row.name}>
-                      <TableCell component="th" align="center" scope="row">
-                        {row.person1}
-                      </TableCell>
-                      <TableCell align="center">{row.person2}</TableCell>
-                      <TableCell align="center">{row.amount}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </>
-        ) : null
-      }
-
-      {Object.keys(outputGraphData).length && Object.keys(inputGraphConfig).length ? (
-        <Graph
-          id="graph-id-output" // id is mandatory
-          data={outputGraphData}
-          config={inputGraphConfig}
-        />
-      ) : null}
-    </>
+      <Grid container>
+        <Grid item xs={6}>
+          {
+            outputList && outputList.length ? (
+              <>
+                <h3> Simplified Transactions</h3>
+                <TableContainer component={Paper} className="table">
+                  <Table aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="center">Payer</TableCell>
+                        <TableCell align="center">Payee</TableCell>
+                        <TableCell align="center">Amount</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {outputList.length && outputList.map((row) => (
+                        <TableRow key={row.name}>
+                          <TableCell component="th" align="center" scope="row">
+                            {row.person1}
+                          </TableCell>
+                          <TableCell align="center">{row.person2}</TableCell>
+                          <TableCell align="center">{row.amount}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </>
+            ) : null
+          }
+        </Grid>
+        <Grid item xs={6}>
+          {
+            Object.keys(outputGraphData).length && Object.keys(inputGraphConfig).length ? (
+              <Graph
+                id="graph-id-output" // id is mandatory
+                data={outputGraphData}
+                config={inputGraphConfig}
+              />
+            ) : null
+          }
+        </Grid>
+      </Grid>
+    </div>
   )
 }
 
