@@ -178,16 +178,18 @@ const Home = () => {
       nodeHighlightBehavior: true,
       node: {
         color: "lightgreen",
-        highlightStrokeColor: "blue"
+        highlightStrokeColor: "blue",
+        fontSize: 12,
       },
       link: {
         highlightColor: "lightblue",
         renderLabel: true,
         labelProperty: "amount",
+        fontSize: 12,
       },
       directed: true,
-      height: 500,
-      width: 500,
+      height: 600,
+      width: 600,
     };
 
     setInputGraphData(data)
@@ -215,7 +217,7 @@ const Home = () => {
     <div>
       <div className="name-component">
         <div className="p-name">
-          <h2>Enter Participant's name</h2>
+          <h2>Enter names of People in the group</h2>
           <div className="p-name-field">
             <TextField id="outlined-basic" label="Participant Name"
               variant="outlined"
@@ -256,6 +258,7 @@ const Home = () => {
                       <li>Enter the names of the Payer in first column</li>
                       <li>Enter the names of the Payee in second column</li>
                       <li>Enter the amount paid in the third column</li>
+                      <li>Click on Build Graph to build a graph from the given transactions</li>
                       <li>Click on Simplify payments button when you are done with entering the payments.</li>
                     </ol>
                   </div>
