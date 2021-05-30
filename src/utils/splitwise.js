@@ -1,7 +1,7 @@
 import Expense from "../classes/expense";
 function upheapify(heap, idx) {
 	// heap = [{first: net_value, second: person}]
-	if(idx == 0) return;
+	if(idx === 0) return;
 	var pi = Math.floor((idx-1)/2);
 	if(heap[pi].first < heap[idx].first) {
 		var temp = heap[pi];
