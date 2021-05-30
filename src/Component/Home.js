@@ -196,7 +196,7 @@ const Home = () => {
     setInputGraphConfig(config)
   }
 
-  const generateNodes = () => allNames.map(item => ({ id: item.name }))
+  const generateNodes = () => allNames.map(item => ({ id: item.name,svg:"https://ik.imagekit.io/imashish/assets/man_E8X6yRm0X.svg" }))
 
   const generateLinks = () => items.map(({ person1, person2, amount }) => ({ source: person1, target: person2, amount }))
 
